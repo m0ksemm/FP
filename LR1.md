@@ -7,7 +7,7 @@
 
 <p align="right"> 
 <b>Студент</b>: 
-<em> XXXXXXXXXXXXXX КВ-12</em></p>
+<em> Чебан Максим КВ-11</em></p>
 
 <p align="right"><b>Рік</b>: <em>2024</em></p>
 
