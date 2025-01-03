@@ -4,7 +4,7 @@
 
 (in-package :space-db)
 
-;;Розділяє рядок CSV на елементи за заданим роздільником.
+;; Розділяє рядок CSV на елементи за заданим роздільником.
 (defun split-csv-line (line &optional (delimiter #\,)) 
   (loop with start = 0
         for pos = (position delimiter line :start start)
@@ -12,7 +12,7 @@
         while pos
         do (setf start (1+ pos))))
 
-;;Зчитує CSV-файл і перетворює його у список асоціацій (alist).
+;; Зчитує CSV-файл і перетворює його у список асоціацій (alist).
 (defun read-csv (file-path)
   (with-open-file (in file-path)
     (let ((headers (mapcar #'string-downcase (split-csv-line (read-line in)))))
@@ -20,7 +20,7 @@
             while line
             collect (pairlis headers (split-csv-line line))))))
 
-;;Записує список асоціацій (alist) у CSV-файл.
+;; Записує список асоціацій (alist) у CSV-файл.
 (defun write-csv (file-path records)
   (with-open-file (out file-path :direction :output :if-exists :supersede)
     (let ((headers (mapcar #'car (first records))))
@@ -28,7 +28,7 @@
       (dolist (record records)
         (format out "~{~a,~}~%" (mapcar (lambda (h) (cdr (assoc h record :test #'equal))) headers))))))
 
-;;Фільтрує записи в CSV-файлі на основі критеріїв.
+;; Фільтрує записи в CSV-файлі на основі критеріїв.
 (defun select (file-path &key filter)
   (let ((records (read-csv file-path)))
     (lambda (&rest args &key)
@@ -39,25 +39,25 @@
                         args)
             collect record))))
 
-;;Перетворює список асоціацій (alist) у хеш-таблицю.
+;; Перетворює список асоціацій (alist) у хеш-таблицю.
 (defun convert-to-hash (alist)
   (let ((hash (make-hash-table :test #'equal)))
     (dolist (pair alist)
       (setf (gethash (car pair) hash) (cdr pair)))
     hash))
 
-;;Перетворює хеш-таблицю у список асоціацій (alist).
+;; Перетворює хеш-таблицю у список асоціацій (alist).
 (defun convert-to-alist (hash)
   (loop for k being the hash-keys in hash
         using (hash-value v)
         collect (cons k v)))
 
-;;Виводить список асоціацій у консоль.
+;; Виводить список асоціацій у консоль.
 (defun print-records (records)
   (dolist (record records)
     (format t "~{~a: ~a ~}~%" (loop for (k . v) in record append (list k v)))))
 
-;Тестує функціональність бібліотеки.
+;; Тестує функціональність бібліотеки.
 (defun test-space-db ()
   (let* ((file-path "space-devices.csv")
          (records (read-csv file-path))
